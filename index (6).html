@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пиона — салон красоты рук</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
+  body { color:#4a2c3a; background:#fff7fa; }
+  a { color:#c94f7c; }
+  header { background:linear-gradient(135deg,#f6c1d4,#e887a8); padding:18px 16px 64px; color:#fff; }
+  nav { max-width:1000px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  .logo { font-size:22px; font-weight:700; letter-spacing:1px; }
+  .menu a { color:#fff; text-decoration:none; margin-left:18px; font-size:15px; }
+  .hero { max-width:1000px; margin:48px auto 0; text-align:center; }
+  .hero h1 { font-size:34px; margin-bottom:12px; text-shadow:0 1px 4px rgba(0,0,0,.15); }
+  .hero p { font-size:17px; opacity:.95; }
+  section { max-width:1000px; margin:0 auto; padding:48px 16px; }
+  h2 { color:#c94f7c; text-align:center; margin-bottom:24px; font-size:26px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .card { background:#fff; border-radius:14px; padding:20px; box-shadow:0 2px 10px rgba(201,79,124,.1); }
+  .card h3 { color:#c94f7c; margin-bottom:8px; font-size:18px; }
+  .price { font-weight:700; margin-top:8px; }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; counter-reset:step; }
+  .step { background:#fff; border-radius:14px; padding:20px; box-shadow:0 2px 10px rgba(201,79,124,.1); }
+  .step b { color:#c94f7c; }
+  /* Расписание */
+  #schedule { background:#fdf2f6; border-radius:16px; padding:20px; box-shadow:0 2px 10px rgba(201,79,124,.1); }
+  .days { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; }
+  .daychip { min-width:92px; background:#fff; border:2px solid #e3b6c6; border-radius:12px; padding:10px 6px; text-align:center; cursor:pointer; font-size:13px; color:#4a2c3a; }
+  .daychip.sel { border-color:#c94f7c; background:#ffe9f1; }
+  .daychip.off { opacity:.55; cursor:not-allowed; }
+  .daychip .d { font-weight:700; }
+  .daychip .s { color:#2e9e5b; font-size:12px; margin-top:3px; }
+  .daychip .busyall { color:#b98da0; font-size:12px; margin-top:3px; }
+  .daychip .closed { color:#d33; font-size:12px; margin-top:3px; }
+  #slots { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px; margin-top:16px; }
+  .slot { padding:10px 4px; border-radius:10px; text-align:center; font-weight:600; border:2px solid #bfe6cf; background:#eafaf0; color:#2e9e5b; cursor:pointer; }
+  .slot.taken { background:#efe6ea; border-color:#e3d3da; color:#b0909d; text-decoration:line-through; cursor:not-allowed; }
+  .slot.closedslot { background:#ffe3ea; border-color:#f0c3d0; color:#d33; text-decoration:line-through; cursor:not-allowed; }
+  #closedNote { display:none; margin-top:12px; background:#ffe3ea; color:#c94f7c; border-radius:10px; padding:10px 14px; font-size:14px; }
+  /* Форма */
+  .formwrap { background:#fff; border-radius:16px; padding:24px; box-shadow:0 2px 10px rgba(201,79,124,.1); max-width:520px; margin:0 auto; }
+  label { display:block; margin:12px 0 4px; font-size:14px; color:#8a5a6e; }
+  input, select, textarea { width:100%; padding:10px 12px; border:1px solid #e3b6c6; border-radius:8px; font-size:16px; background:#fff; }
+  .btns { display:grid; grid-template-columns:1fr; gap:10px; margin-top:18px; }
+  .btn { padding:13px; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; color:#fff; }
+  .btn.tg { background:#2aabee; }
+  .btn.mx { background:#7b61ff; }
+  .btn.ph { background:#c94f7c; }
+  .plaque { display:none; margin-top:12px; background:#eafaf0; color:#2e9e5b; border:1px solid #bfe6cf; border-radius:10px; padding:10px 14px; font-size:14px; text-align:center; }
+  .formmsg { display:none; margin-top:10px; color:#d33; font-size:14px; }
+  .note { font-size:13px; color:#b98da0; margin-top:10px; }
+  footer { background:#4a2c3a; color:#f6dbe4; text-align:center; padding:24px; font-size:14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">Пиона 🌸</div>
+    <div class="menu">
+      <a href="#services">Услуги</a>
+      <a href="#sched">Расписание</a>
+      <a href="#book">Запись</a>
+      <a href="#contacts">Контакты</a>
+    </div>
+  </nav>
+  <div class="hero">
+    <h1>Красота в каждой детали ваших рук</h1>
+    <p>Маникюр и педикюр в Сладково. Записывайтесь онлайн — выбирайте удобное время сами.</p>
+  </div>
+</header>
+
+<section id="services">
+  <h2>Услуги и цены</h2>
+  <div class="cards">
+    <div class="card"><h3>Маникюр</h3><p>Аппаратный, комбинированный</p><div class="price">от 1 000 ₽</div></div>
+    <div class="card"><h3>Педикюр</h3><p>Аппаратный, с обработкой стоп</p><div class="price">от 1 200 ₽</div></div>
+    <div class="card"><h3>Покрытие гель-лаком</h3><p>Однотонное, стойкое</p><div class="price">от 800 ₽</div></div>
+    <div class="card"><h3>Дизайн</h3><p>Френч, стемпинг, роспись</p><div class="price">от 200 ₽</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Четыре шага к красивым рукам</h2>
+  <div class="steps">
+    <div class="step"><b>1.</b> Выберите дату и время в расписании ниже.</div>
+    <div class="step"><b>2.</b> Заполните форму записи — имя, телефон, услуга.</div>
+    <div class="step"><b>3.</b> Нажмите удобный мессенджер — заявка уже сохранена.</div>
+    <div class="step"><b>4.</b> Я подтвержу визит в переписке. До встречи!</div>
+  </div>
+</section>
+
+<section id="sched">
+  <h2>Расписание</h2>
+  <div class="days" id="days"></div>
+  <div id="slots"></div>
+  <div id="closedNote">Этот день закрыт — мастер отдыхает 🌷</div>
+</section>
+
+<section id="book">
+  <h2>Запись на визит</h2>
+  <div class="formwrap">
+    <form id="form" onsubmit="return false">
+      <label>Ваше имя</label>
+      <input id="f_name" placeholder="Например: Анна">
+      <label>Телефон</label>
+      <input id="f_phone" placeholder="+7 (___) ___-__-__">
+      <label>Услуга</label>
+      <select id="f_service">
+        <option>Маникюр</option>
+        <option>Педикюр</option>
+        <option>Маникюр + покрытие гель-лаком</option>
+        <option>Педикюр + покрытие гель-лаком</option>
+        <option>Дизайн</option>
+      </select>
+      <label>Дата визита</label>
+      <input type="date" id="f_date">
+      <label>Время визита</label>
+      <select id="f_time"></select>
+      <label>Пожелания (необязательно)</label>
+      <textarea id="f_wish" rows="2" placeholder="Например: хочется френч"></textarea>
+      <div class="btns">
+        <button class="btn tg" onclick="send('tg')">🟦 Записаться через Telegram</button>
+        <button class="btn mx" onclick="send('mx')">🟣 Записаться в MAX</button>
+        <button class="btn ph" onclick="send('ph')">📞 Записаться по телефону</button>
+      </div>
+      <div class="formmsg" id="formmsg"></div>
+      <div class="plaque" id="plaque"></div>
+      <p class="note">Заявка сохраняется в журнал мастера сразу — мастер подтвердит запись в переписке.</p>
+    </form>
+  </div>
+</section>
+
+<section id="contacts">
+  <h2>Контакты</h2>
+  <div class="cards">
+    <div class="card"><h3>Адрес</h3><p>с. Сладково, Тюменская область</p></div>
+    <div class="card"><h3>Telegram</h3><p><a href="https://t.me/Piona_Sladkovo" target="_blank">@Piona_Sladkovo</a></p></div>
+    <div class="card"><h3>MAX</h3><p><a href="https://max.ru/u/piona_sladkovo" target="_blank">max.ru/u/piona_sladkovo</a></p></div>
+    <div class="card"><h3>Телефон</h3><p><a href="tel:+79000000000">+7 900 000-00-00</a></p></div>
+  </div>
+</section>
+
+<footer>© Пиона — салон красоты рук. Сладково 🌸</footer>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIY1nhqV-kMxfnCESgLbKNpp89A2ZJyIYTU-3_WMTbnJCTFuFpfRxuQ3Uw1GqkBF2Z/exec';
+const TIME_SLOTS = ['10:00','12:00','14:00','16:00','18:00','19:30'];
+const TG_LINK = 'https://t.me/Piona_Sladkovo';
+const MAX_LINK = 'https://max.ru/u/piona_sladkovo';
+const PHONE_TEXT = '+7 900 000-00-00';
+
+let busyMap = {}, closedList = [], selectedDate = '';
+
+function pad(n){ return (n<10?'0':'')+n; }
+function toDDMM(d){ return pad(d.getDate())+'.'+pad(d.getMonth()+1)+'.'+d.getFullYear(); }
+function todayStr(){ return toDDMM(new Date()); }
+
+async function loadBusy(){
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=busy');
+    const j = await res.json();
+    if (j.ok) { busyMap = j.busy || {}; closedList = j.closed || []; }
+  } catch(e) { /* показываем без брони, форма перепроверит */ }
+}
+
+function isClosed(d){ return closedList.indexOf(d) !== -1; }
+
+function renderDays(){
+  const box = document.getElementById('days');
+  let html = '';
+  const now = new Date();
+  for (let i=0;i<14;i++){
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate()+i);
+    const ds = toDDMM(d);
+    const wd = ['вс','пн','вт','ср','чт','пт','сб'][d.getDay()];
+    let status, cls='daychip';
+    if (isClosed(ds)) { status='<span class="closed">выходной</span>'; }
+    else {
+      const taken = (busyMap[ds]||[]).length;
+      const free = TIME_SLOTS.length - taken;
+      if (free<=0) { status='<span class="busyall">занято</span>'; }
+      else status='<span class="s">свободно: '+free+'</span>';
+    }
+    if (ds===selectedDate) cls+=' sel';
+    if (isClosed(ds) || (busyMap[ds]||[]).length>=TIME_SLOTS.length) cls+=' off';
+    html += '<div class="'+cls+'" data-date="'+ds+'" onclick="pickDay(\''+ds+'\')">'+
+            '<div class="d">'+pad(d.getDate())+'.'+pad(d.getMonth()+1)+'</div>'+
+            '<div>'+wd+'</div>'+status+'</div>';
+  }
+  box.innerHTML = html;
+}
+
+function renderSlots(){
+  const box = document.getElementById('slots');
+  const note = document.getElementById('closedNote');
+  if (!selectedDate){ box.innerHTML=''; note.style.display='none'; return; }
+  const taken = busyMap[selectedDate] || [];
+  if (isClosed(selectedDate)){
+    box.innerHTML = TIME_SLOTS.map(t=>'<div class="slot closedslot">'+t+'</div>').join('');
+    note.style.display='block';
+    return;
+  }
+  note.style.display='none';
+  box.innerHTML = TIME_SLOTS.map(t=>
+    taken.indexOf(t)!==-1
+      ? '<div class="slot taken">'+t+'</div>'
+      : '<div class="slot" onclick="pickSlot(\''+t+'\')">'+t+'</div>'
+  ).join('');
+}
+
+function pickDay(ds){
+  if (isClosed(ds)) { selectedDate=ds; renderSlots(); return; }
+  const taken=(busyMap[ds]||[]).length;
+  if (taken>=TIME_SLOTS.length) return;
+  selectedDate=ds;
+  renderDays(); renderSlots();
+}
+
+function pickSlot(t){
+  document.getElementById('f_date').value = isoFromDDMM(selectedDate);
+  fillTimeSelect(selectedDate, true);
+  document.getElementById('f_time').value = t;
+  document.getElementById('book').scrollIntoView({behavior:'smooth'});
+}
+
+function isoFromDDMM(s){ const p=s.split('.'); return p[2]+'-'+p[1]+'-'+p[0]; }
+function ddmFromISO(s){ const p=s.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
+
+function fillTimeSelect(ds, force){
+  const sel = document.getElementById('f_time');
+  const taken = busyMap[ds] || [];
+  const closed = isClosed(ds);
+  let html='';
+  TIME_SLOTS.forEach(t=>{
+    const bad = closed || taken.indexOf(t)!==-1;
+    html += '<option value="'+t+'"'+(bad?' disabled':'')+'>'+t+(closed?' — выходной':'')+(taken.indexOf(t)!==-1?' — занято':'')+'</option>';
+  });
+  sel.innerHTML = html;
+}
+
+function initFormDate(){
+  const inp = document.getElementById('f_date');
+  const now = new Date();
+  inp.min = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  inp.value = inp.min;
+  inp.onchange = function(){ fillTimeSelect(ddmFromISO(inp.value)); };
+  fillTimeSelect(ddmFromISO(inp.value));
+}
+
+async function send(method){
+  const msg = document.getElementById('formmsg');
+  const plaque = document.getElementById('plaque');
+  msg.style.display='none'; plaque.style.display='none';
+
+  const name = document.getElementById('f_name').value.trim();
+  const phone = document.getElementById('f_phone').value.trim();
+  const service = document.getElementById('f_service').value;
+  const wish = document.getElementById('f_wish').value.trim();
+  const dateISO = document.getElementById('f_date').value;
+  const time = document.getElementById('f_time').value;
+  if (!name || !phone || !dateISO || !time){ msg.textContent='Заполните имя, телефон, дату и время.'; msg.style.display='block'; return; }
+  const visitDate = ddmFromISO(dateISO);
+
+  // свежая проверка брони
+  await loadBusy();
+  if (isClosed(visitDate)){ msg.textContent='Этот день закрыт — выберите другой.'; msg.style.display='block'; renderDays(); renderSlots(); return; }
+  if ((busyMap[visitDate]||[]).indexOf(time)!==-1){ msg.textContent='Это время уже занято — выберите другое.'; msg.style.display='block'; renderDays(); renderSlots(); return; }
+
+  // сохраняем заявку в таблицу ДО открытия мессенджера
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ name:name, phone:phone, service:service, visitDate:visitDate, visitTime:time, wish:wish }) });
+  } catch(e) { /* не блокируем клиента */ }
+
+  const text = 'Здравствуйте! Хочу записаться в «Пиону».\nИмя: '+name+'\nТелефон: '+phone+
+    '\nУслуга: '+service+'\nДата: '+visitDate+'\nВремя: '+time+(wish?'\nПожелания: '+wish:'');
+
+  if (method==='tg'){ window.open(TG_LINK+'?text='+encodeURIComponent(text),'_blank'); }
+  else if (method==='mx'){ window.open(MAX_LINK,'_blank'); }
+  else {
+    try { await navigator.clipboard.writeText(text); } catch(e) {}
+    plaque.innerHTML='Текст заявки скопирован! Отправьте его в SMS или позвоните: '+PHONE_TEXT;
+    plaque.style.display='block';
+  }
+
+  await loadBusy();
+  renderDays(); renderSlots(); fillTimeSelect(visitDate);
+}
+
+(async function init(){
+  await loadBusy();
+  if (!selectedDate) selectedDate = todayStr();
+  if (isClosed(selectedDate)) selectedDate='';
+  renderDays(); renderSlots(); initFormDate();
+})();
+</script>
+</body>
+</html>
