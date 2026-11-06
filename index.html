@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пиона — салон маникюра в с. Сладково</title>
+<style>
+  :root {
+    --pink: #d96a92;
+    --pink-dark: #b84a75;
+    --pink-light: #fdf2f6;
+    --pink-mid: #f7dbe5;
+    --text: #4a2c3a;
+    --muted: #a97f92;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--pink-light); color:var(--text); line-height:1.6; }
+  a { color:var(--pink-dark); }
+
+  /* Навигация */
+  nav { position:sticky; top:0; z-index:100; background:rgba(253,242,246,.95); backdrop-filter:blur(8px); border-bottom:1px solid var(--pink-mid); }
+  nav .inner { max-width:1000px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .logo { font-size:20px; font-weight:800; color:var(--pink-dark); text-decoration:none; }
+  nav .links { display:flex; gap:18px; flex-wrap:wrap; }
+  nav .links a { text-decoration:none; font-size:14px; color:var(--text); }
+  nav .links a:hover { color:var(--pink-dark); }
+  nav .cta { background:var(--pink); color:#fff !important; padding:8px 18px; border-radius:20px; font-weight:600; }
+
+  /* Шапка */
+  header { text-align:center; padding:60px 20px 50px; background:linear-gradient(135deg,#fdeef4,#f9d7e3); }
+  .peony { font-size:34px; letter-spacing:6px; }
+  header .sub { margin-top:10px; font-size:14px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+  header h1 { margin-top:12px; font-size:34px; color:var(--pink-dark); }
+  header .desc { max-width:520px; margin:14px auto 0; color:var(--text); }
+  .btn-row { margin-top:26px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn { display:inline-block; padding:13px 26px; border-radius:26px; text-decoration:none; font-weight:600; font-size:15px; cursor:pointer; border:none; }
+  .btn-main { background:var(--pink); color:#fff; }
+  .btn-ghost { background:#fff; color:var(--pink-dark); border:1.5px solid var(--pink-mid); }
+
+  /* Секции */
+  section { max-width:1000px; margin:0 auto; padding:50px 20px; }
+  .label { text-align:center; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+  h2 { text-align:center; margin:6px 0 10px; font-size:26px; color:var(--pink-dark); }
+  .lead { text-align:center; max-width:560px; margin:0 auto 30px; color:var(--text); }
+
+  /* Услуги */
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .card { background:#fff; border-radius:16px; padding:24px 20px; box-shadow:0 3px 14px rgba(184,74,117,.1); }
+  .card .ico { font-size:28px; }
+  .card h3 { margin:10px 0 6px; font-size:17px; }
+  .card p { font-size:14px; color:var(--text); }
+  .card .price { margin-top:10px; font-weight:700; color:var(--pink-dark); }
+
+  /* Шаги */
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; counter-reset:step; }
+  .step { background:#fff; border-radius:16px; padding:22px 18px; box-shadow:0 3px 14px rgba(184,74,117,.08); position:relative; }
+  .step .num { width:34px; height:34px; border-radius:50%; background:var(--pink-mid); color:var(--pink-dark); font-weight:700; display:flex; align-items:center; justify-content:center; margin-bottom:10px; }
+  .step h3 { font-size:16px; margin-bottom:6px; }
+  .step p { font-size:13.5px; }
+
+  /* Форма */
+  .form-box { max-width:560px; margin:0 auto; background:#fff; border-radius:20px; padding:28px; box-shadow:0 6px 24px rgba(184,74,117,.14); }
+  label { display:block; margin:14px 0 5px; font-size:14px; font-weight:600; }
+  input, select, textarea { width:100%; padding:11px 12px; border:1.5px solid var(--pink-mid); border-radius:9px; font-size:15px; background:#fff; color:var(--text); }
+  textarea { min-height:80px; resize:vertical; }
+  .btn-submit { width:100%; margin-top:18px; padding:14px; border:none; border-radius:12px; background:linear-gradient(135deg,#e887a8,#c94f7c); color:#fff; font-size:16px; font-weight:700; cursor:pointer; }
+  .btn-submit:active { transform:scale(.98); }
+  .note { margin-top:12px; font-size:12.5px; color:var(--muted); text-align:center; }
+  .ok-msg { display:none; margin-top:14px; padding:12px 14px; background:#eefaf2; border:1px solid #bfe8cd; border-radius:10px; font-size:14px; color:#2e7d4f; text-align:center; }
+  .channel-btns { display:grid; gap:10px; margin-top:16px; }
+  .ch-btn { display:flex; align-items:center; justify-content:center; gap:8px; padding:13px; border-radius:11px; border:none; font-size:15px; font-weight:600; cursor:pointer; color:#fff; }
+  .ch-tg { background:#229ED9; }
+  .ch-max { background:#8a4fd3; }
+  .ch-tel { background:#5e8c6a; }
+  .ch-btn:active { transform:scale(.98); }
+
+  /* Контакты */
+  .contacts { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+  .contact { background:#fff; border-radius:16px; padding:20px; box-shadow:0 3px 14px rgba(184,74,117,.1); }
+  .contact h3 { font-size:15px; margin-bottom:6px; }
+  .contact p { font-size:14px; }
+  .contact .big { font-weight:700; color:var(--pink-dark); }
+
+  footer { text-align:center; padding:28px 16px; font-size:13px; color:var(--muted); border-top:1px solid var(--pink-mid); background:#fff; }
+
+  /* Тост */
+  #toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--pink-dark); color:#fff; padding:12px 20px; border-radius:24px; font-size:14px; display:none; z-index:200; }
+</style>
+</head>
+<body>
+
+<!-- НАВИГАЦИЯ -->
+<nav>
+  <div class="inner">
+    <a class="logo" href="#">🌸 Пиона.</a>
+    <div class="links">
+      <a href="#services">Услуги</a>
+      <a href="#how">Как всё проходит</a>
+      <a href="#contacts">Контакты</a>
+      <a class="cta" href="#book">Записаться</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ШАПКА -->
+<header>
+  <div class="peony">🌸🌸🌸</div>
+  <div class="sub">маникюр · с. Сладково</div>
+  <h1>Красота в каждой детали ваших рук</h1>
+  <p class="desc">Уютный салон маникюра «Пиона» в сердце Сладково. Стерильность, забота и результат, на который приятно смотреть — и ещё приятнее жить.</p>
+  <div class="btn-row">
+    <a class="btn btn-main" href="#book">Записаться онлайн</a>
+    <a class="btn btn-ghost" href="tel:+79829788482">Позвонить мастеру</a>
+  </div>
+</header>
+
+<!-- УСЛУГИ -->
+<section id="services">
+  <div class="label">услуги и цены</div>
+  <h2>Что я делаю с любовью</h2>
+  <p class="lead">Точные цены назову в Telegram, MAX или по телефону — они зависят от дизайна, длины и покрытия. Ниже — ориентир.</p>
+  <div class="cards">
+    <div class="card"><div class="ico">💅</div><h3>Классический маникюр</h3><p>Обрезная техника, уход за кутикулой, покрытие гель-лаком.</p><div class="price">от 1 000 ₽</div></div>
+    <div class="card"><div class="ico">✨</div><h3>Аппаратный маникюр</h3><p>Бережная работа фрезой — идеально для чувствительной кожи.</p><div class="price">от 1 200 ₽</div></div>
+    <div class="card"><div class="ico">🎨</div><h3>Дизайн ногтей</h3><p>Френч, стемпинг, роспись, слайдеры — на ваш вкус.</p><div class="price">от 200 ₽</div></div>
+    <div class="card"><div class="ico">🌿</div><h3>Уход и укрепление</h3><p>Ремонт ногтя, укрепление гелем, парафинотерапия.</p><div class="price">от 300 ₽</div></div>
+  </div>
+</section>
+
+<!-- КАК ВСЁ ПРОХОДИТ -->
+<section id="how">
+  <div class="label">как всё проходит</div>
+  <h2>Четыре шага до идеальных рук</h2>
+  <div class="steps" style="margin-top:26px">
+    <div class="step"><div class="num">1</div><h3>Запись</h3><p>Заполняете форму ниже — заявка уходит в таблицу и мне в Telegram, MAX или по телефону.</p></div>
+    <div class="step"><div class="num">2</div><h3>Подтверждение</h3><p>Я свяжусь с вами и подтвержу визит, уточню пожелания по дизайну.</p></div>
+    <div class="step"><div class="num">3</div><h3>Визит</h3><p>Кофе или чай, стерильные инструменты и внимательная работа.</p></div>
+    <div class="step"><div class="num">4</div><h3>Результат</h3><p>Рады визиту, гордитесь руками. До встречи через 3–4 недели!</p></div>
+  </div>
+</section>
+
+<!-- ЗАПИСЬ -->
+<section id="book">
+  <div class="label">онлайн-запись</div>
+  <h2>Оставьте заявку на бронь</h2>
+  <p class="lead">Заявка сохранится в моём списке, а готовый текст откроется в выбранном мессенджере — вам останется нажать «Отправить».</p>
+
+  <div class="form-box">
+    <label for="name">Ваше имя *</label>
+    <input type="text" id="name" required placeholder="Пожалуйста, укажите имя">
+
+    <label for="phone">Телефон или ник в мессенджере *</label>
+    <input type="text" id="phone" required placeholder="+7 (___) ___-__-__ или @ник">
+
+    <label for="service">Услуга</label>
+    <select id="service">
+      <option>Классический маникюр</option>
+      <option>Аппаратный маникюр</option>
+      <option>Дизайн ногтей</option>
+      <option>Уход и укрепление</option>
+      <option>Пока не знаю — посоветуюсь</option>
+    </select>
+
+    <label for="visitDate">Желаемая дата *</label>
+    <input type="date" id="visitDate" required>
+
+    <label for="visitTime">Удобное время</label>
+    <select id="visitTime">
+      <option>10:00</option><option>11:00</option><option>12:00</option>
+      <option>13:00</option><option>14:00</option><option>15:00</option>
+      <option>16:00</option><option>17:00</option><option>18:00</option>
+      <option>19:00</option>
+    </select>
+
+    <label for="wishes">Пожелания</label>
+    <textarea id="wishes" placeholder="Дизайн, длина, форма — что важно знать"></textarea>
+
+    <div class="channel-btns">
+      <button class="ch-btn ch-tg" onclick="send('telegram')">✈️ Записаться в Telegram</button>
+      <button class="ch-btn ch-max" onclick="send('max')">🟣 Записаться в MAX</button>
+      <button class="ch-btn ch-tel" onclick="send('phone')">📞 Записаться по телефону</button>
+    </div>
+
+    <div class="ok-msg" id="okMsg">🌸 Заявка сохранена и готова к отправке! Если мессенджер не открылся — напишите мне напрямую: @Piona_Sladkovo в Telegram, в MAX либо позвоните: +7 (982) 978-84-82.</div>
+    <p class="note">Нажимая кнопку, вы соглашаетесь на обработку указанных данных для записи на услугу.</p>
+  </div>
+</section>
+
+<!-- КОНТАКТЫ -->
+<section id="contacts">
+  <div class="label">контакты</div>
+  <h2>Находимся здесь</h2>
+  <div class="contacts" style="margin-top:26px">
+    <div class="contact"><h3>📍 Адрес</h3><p>Россия, Тюменская область,<br>Сладковский район, с. Сладково</p></div>
+    <div class="contact"><h3>📞 Телефон</h3><p class="big"><a href="tel:+79829788482">+7 (982) 978-84-82</a></p><p>Звоните или пишите — отвечу с 10:00 до 20:00.</p></div>
+    <div class="contact"><h3>✈️ Telegram</h3><p>Запись и вопросы:<br><span class="big"><a href="https://t.me/Piona_Sladkovo" target="_blank">@Piona_Sladkovo</a></span></p></div>
+    <div class="contact"><h3>🟣 MAX</h3><p>Запись и вопросы:<br><span class="big"><a href="https://max.ru/u/f9LHodD0cOL_CnYxz-t1prUHDnko6cprBKXyHvuuC9PokBQwVmKsFQMa43c" target="_blank">мой профиль в MAX</a></span></p></div>
+    <div class="contact"><h3>🕰 Часы работы</h3><p>Ежедневно, 10:00–20:00.<br>Точное время визита подтверждаем в переписке.</p></div>
+  </div>
+</section>
+
+<footer>
+  🌸 Пиона. © 2026 Салон маникюра «Пиона» · с. Сладково · <a href="tel:+79829788482">+7 (982) 978-84-82</a> · <a href="https://t.me/Piona_Sladkovo" target="_blank">@Piona_Sladkovo</a>
+</footer>
+
+<div id="toast">Текст заявки скопирован!</div>
+
+<script>
+// ===== НАСТРОЙКИ (заполнено) =====
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIY1nhqV-kMxfnCESgLbKNpp89A2ZJyIYTU-3_WMTbnJCTFuFpfRxuQ3Uw1GqkBF2Z/exec';
+const TELEGRAM_LINK = 'https://t.me/Piona_Sladkovo';
+const MAX_LINK = 'https://max.ru/u/f9LHodD0cOL_CnYxz-t1prUHDnko6cprBKXyHvuuC9PokBQwVmKsFQMa43c';
+const PHONE = '+79829788482';
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+
+async function send(channel) {
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const service = document.getElementById('service').value;
+  const visitDate = document.getElementById('visitDate').value;
+  const visitTime = document.getElementById('visitTime').value;
+  const wishes = document.getElementById('wishes').value.trim();
+
+  if (!name || !phone || !visitDate) {
+    alert('Пожалуйста, заполните имя, телефон и желаемую дату.');
+    return;
+  }
+
+  // дата в привычном виде 05.11.2026
+  let datePretty = visitDate;
+  const parts = visitDate.split('-');
+  if (parts.length === 3) datePretty = parts[2] + '.' + parts[1] + '.' + parts[0];
+
+  const text = 'Новая заявка на маникюр! 🌸\n' +
+    'Имя: ' + name + '\n' +
+    'Связь: ' + phone + '\n' +
+    'Услуга: ' + service + '\n' +
+    'Дата визита: ' + datePretty + '\n' +
+    'Время: ' + visitTime + '\n' +
+    (wishes ? 'Пожелания: ' + wishes : '');
+
+  // 1. Заявка в таблицу (не мешает, даже если не удастся)
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        service: service,
+        visitDate: datePretty,
+        visitTime: visitTime,
+        wishes: wishes
+      })
+    });
+  } catch (err) { /* таблица не ответила — мессенджер всё равно откроем */ }
+
+  // 2. Открыть выбранный канал связи
+  if (channel === 'telegram') {
+    window.open(TELEGRAM_LINK, '_blank');
+  } else if (channel === 'max') {
+    window.open(MAX_LINK, '_blank');
+  } else if (channel === 'phone') {
+    // скопировать текст и позвонить
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast();
+    } catch (err) { /* буфер недоступен — просто звоним */ }
+    window.location.href = 'tel:' + PHONE;
+  }
+
+  document.getElementById('okMsg').style.display = 'block';
+}
+</script>
+</body>
+</html>

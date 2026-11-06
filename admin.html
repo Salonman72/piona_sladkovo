@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка — Пиона</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; }
+  body { background:#fdf2f6; color:#4a2c3a; min-height:100vh; }
+  header { background:linear-gradient(135deg,#e887a8,#c94f7c); color:#fff; padding:20px; text-align:center; }
+  .wrap { max-width:900px; margin:0 auto; padding:20px 16px; }
+  .login { max-width:380px; margin:60px auto; background:#fff; border-radius:16px; padding:28px; box-shadow:0 4px 16px rgba(201,79,124,.12); }
+  input { width:100%; padding:10px 12px; border:1px solid #e3b6c6; border-radius:8px; font-size:16px; }
+  button { width:100%; margin-top:14px; padding:12px; border:none; border-radius:10px; background:linear-gradient(135deg,#e887a8,#c94f7c); color:#fff; font-size:16px; font-weight:600; cursor:pointer; }
+  .err { color:#d33; margin-top:10px; font-size:14px; display:none; }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(201,79,124,.1); }
+  th, td { padding:10px 12px; border-bottom:1px solid #f3dbe4; text-align:left; font-size:14px; }
+  th { background:#c94f7c; color:#fff; white-space:nowrap; }
+  tr:last-child td { border-bottom:none; }
+  td.num { white-space:nowrap; }
+</style>
+</head>
+<body>
+<header><h1>Заявки — Пиона</h1></header>
+
+<div class="wrap">
+  <div class="login" id="loginBox">
+    <h2 style="margin-bottom:14px;color:#c94f7c">Вход в админку</h2>
+    <input type="password" id="pass" placeholder="Пароль">
+    <button onclick="load()">Войти</button>
+    <div class="err" id="err">Неверный пароль</div>
+  </div>
+
+  <div id="dataBox" style="display:none">
+    <h2 style="margin-bottom:12px;color:#c94f7c">Заявки</h2>
+    <table>
+      <thead><tr>
+        <th>Дата подачи</th><th>Имя</th><th>Телефон</th>
+        <th>Услуга</th><th>Дата визита</th><th>Время визита</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <p style="margin-top:14px;font-size:13px;color:#b98da0">Обновлено: <span id="updated"></span> · <a href="#" onclick="location.reload();return false">обновить</a></p>
+  </div>
+</div>
+
+<script>
+// ===== НАСТРОЙКИ (заполнено) =====
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxIY1nhqV-kMxfnCESgLbKNpp89A2ZJyIYTU-3_WMTbnJCTFuFpfRxuQ3Uw1GqkBF2Z/exec';
+const ADMIN_PASSWORD = 'piona7235';
+
+async function load(){
+  const pass = document.getElementById('pass').value;
+  if (pass !== ADMIN_PASSWORD) {
+    document.getElementById('err').style.display = 'block';
+    return;
+  }
+  document.getElementById('err').style.display = 'none';
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=get&password=' + encodeURIComponent(pass));
+    const json = await res.json();
+    if (!json.ok) {
+      document.getElementById('err').style.display = 'block';
+      return;
+    }
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('dataBox').style.display = 'block';
+    const tbody = document.getElementById('tbody');
+    tbody.innerHTML = (json.items || []).map(r =>
+      '<tr><td class="num">' + r['подано'] + '</td><td>' + r['имя'] + '</td>' +
+      '<td class="num">' + r['телефон'] + '</td><td>' + r['услуга'] + '</td>' +
+      '<td class="num">' + r['визитДата'] + '</td><td class="num">' + r['визитВремя'] + '</td></tr>'
+    ).join('') || '<tr><td colspan="6">Пока заявок нет</td></tr>';
+    document.getElementById('updated').textContent = new Date().toLocaleString('ru-RU');
+  } catch(err) {
+    alert('Ошибка загрузки заявок: ' + err);
+  }
+}
+document.getElementById('pass').addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
+</script>
+</body>
+</html>
